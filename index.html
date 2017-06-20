@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<meta name="description" content=""/>
+	<meta name="author" content=""/>
+
+	<title>ManualTagger</title>
+
+	
+	
+	<!--[if IE]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+      <![endif]-->
+      <!-- Bootstrap Core CSS -->
+      <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+
+      <!-- Fonts -->
+      <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+      <link href="css/animate.css" rel="stylesheet" type="text/css"/>
+      <link href="css/style.css" rel="stylesheet" type="text/css"/>
+      <link href="css/color.css" rel="stylesheet" type="text/css"/>
+      <!-- animsition.css -->
+      <link rel="stylesheet" href="css/animsition.min.css">
+
+      <script src="js/jquery.min.js"></script>
+      <script type='text/javascript' src='js/modernizr.js'></script>
+      <script type='text/javascript' src="js/jsoneditor.js"></script>     
+      
+    </head>
+
+    <body id="page-top" data-spy="scroll" data-target=".navbar-custom" class="bg-dark">
+     <div id="page-wrap">
+
+      <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+       <div class="container">
+        <div class="navbar-header page-scroll">
+         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+          <i class="fa fa-bars"></i>
+        </button>
+        <h1 id="rDisplay"></h1>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
+       <ul class="nav navbar-nav">
+      </ul>
+    </div>
+    <!-- /.navbar-collapse -->
+  </div>
+  <!-- /.container -->
+</nav>
+<!-- </header> -->
+
+<section id="main-content" style="height:100%">
+ <div id="guts" style="height:100%; padding-bottom:0;" class="animsition" data-animsition-in-class="zoom-in-lg"
+  data-animsition-in-duration="500"
+  data-animsition-out-class="fade-out-up"
+  data-animsition-out-duration="300">
+
+  <!-- Section: samples -->
+  <section id="samplelist" class="home-section text-center bg-dark">
+    <div class="heading-about">
+    </div>
+    <div class="container">
+      <div class="row">
+          <div class="progress">
+            <div id="progress" class="progress-bar progress-bar-striped active" role="progressbar"
+            aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+            </div>
+          </div> 
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-12">
+          <div class="wow fadeInLeft" data-wow-delay="0.2s">
+            <div class="service-box">
+              <div class="service-icon">
+                <img src="img/icons/list.svg" alt="" />
+              </div>
+              <div class="service-desc" >
+                <div>
+                  <input type="file" id="fileInput" class="btn btn-primary">
+                </div>
+                <!-- <pre id="fileDisplayArea"></pre> -->
+              </div>
+              <div class="panel panel-primary">
+              <div class="panel-heading"><h4 id="textDisplay"></h4></div>
+              <div class="panel-body">              
+                <div class="row">
+                <div class="col-md-3"><strong>POS</strong></div>
+                <div class="col-md-3" id="pos"></div>
+                <div class="col-md-3"><strong>NEG</strong></div>
+                <div class="col-md-3" id="neg"></div>
+                </div>
+              </div>
+              </div>
+              <div class="panel panel-primary">
+              <div class="panel-body"> 
+                <div class="row">
+                  <div id="editor_holder"></div>
+                </div>
+              </div>
+              <div class="panel-footer">
+                <button id='submit' class="btn btn-primary" data-toggle="popover" data-trigger="hover" data-content="Next review"><span class="glyphicon glyphicon-chevron-right"></span></button>
+                <a id="ddl" href="#" class="btn btn-success" data-toggle="popover" data-trigger="hover" data-content="Save as..."><span class="glyphicon glyphicon-save"></span></a>
+              </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> <!-- end container-->
+  </div>
+</section> 
+<!-- /Section: samples -->
+
+</div>
+
+
+</section><!-- /main-content -->
+    </div>
+
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.easing.min.js"></script>
+    <script src="js/wow.min.js"></script>
+    <script src="js/animsition.min.js"></script>
+    <!-- Custom Theme JavaScript -->
+    <script src="js/custom.js"></script>
+    <script>
+$(document).ready(function() {
+  $('[data-toggle="popover"]').popover();
+
+  $(".animsition").animsition({
+    inClass: 'fade-in-down',
+    outClass: 'fade-out-down',
+    inDuration: 1500,
+    outDuration: 800,
+    linkElement: '.animsition-link',
+    // e.g. linkElement: 'a:not([target="_blank"]):not([href^="#"])'
+    loading: true,
+    loadingParentElement: 'body', //animsition wrapper element
+    loadingClass: 'animsition-loading',
+    loadingInner: '', // e.g '<img src="loading.svg" />'
+    timeout: false,
+    timeoutCountdown: 5000,
+    onLoadEvent: true,
+    browser: [ 'animation-duration', '-webkit-animation-duration'],
+    // "browser" option allows you to disable the "animsition" in case the css property in the array is not supported by your browser.
+    // The default setting is to disable the "animsition" in a browser that does not support "animation-duration".
+    overlay : false,
+    overlayClass : 'animsition-overlay-slide',
+    overlayParentElement : 'body',
+    transition: function(url){ window.location.href = url; }
+  });
+});
+
+
+</script>
+<script>
+window.onload = function() {
+
+    var fileInput = document.getElementById('fileInput');
+    var fileDisplayArea = document.getElementById('fileDisplayArea');
+    var reviews = [{"text":""}];
+    var json = {"status":"empty"};
+    var element = document.getElementById('editor_holder');
+    var totalReviews = reviews.length;
+    var current = 0;
+    var editor ;
+
+    fileInput.addEventListener('change', function(e) {
+      var file = fileInput.files[0];
+      var textType = /json.*/;
+
+      if (file.type.match(textType)) {
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+          console.log("parsing json");
+          var obj = JSON.parse(reader.result);
+          console.log(obj);
+          console.log("retrieving info from json");
+          reviews = obj['reviews'];
+          json = obj;
+          totalReviews = reviews.length;
+          // fileDisplayArea.innerText = JSON.stringify(reviews[current]);
+          if(editor != null){
+            editor.destroy();
+          }
+          init_editor(reviews[current]);   
+        } 
+        reader.readAsText(file);
+        // console.log("reviews" + reviews);
+      } else {
+        fileDisplayArea.innerText = "File not supported!"
+      }
+    });
+
+
+    
+    function init_editor(review){
+      editor = new JSONEditor(element, {
+          theme: 'bootstrap3',
+          iconlib: 'fontawesome4',
+          format: "grid",
+          disable_collapse : true,
+          disable_properties : true,
+          disable_array_reorder: true,
+          schema: {
+                type: "object",
+                title: "Review",
+                properties: {
+                  pos: {
+                    "type": "array",
+                    "format": "table",
+                    "title": "pos",
+                    "uniqueItems": false,
+                    "items": {
+                      "type": "string",
+                      "title": "Pos",
+                      enum: ['Equipement', 'Cosy', 'Modern', 'Vue', 'Clean', 'Recommandation', 'Au dessus des attentes', 'Confortable', 'Experience_immersive', 'Global', 'Cadeau_d_arrivé', 'Beau', 'Bien situé', 'Calme', 'View', 'Location', 'Cadeau_d_arrivee', 'Cuisine', 'Ascenceur', 'Au_dessus_des_attentes', 'Cosie', 'Ascenseur', 'Accueil', 'Sureté', 'Romantique', 'AC', 'Bien_situe', 'Douche', 'Propre', 'parking']
+                    }
+                  },
+                  neg: {
+                    "type": "array",
+                    "format": "table",
+                    "title": "neg",
+                    "uniqueItems": false,
+                    "items": {
+                      "type": "string",
+                      "title": "Neg",
+                      enum: ['Bruit', 'SalleDeBainVieille', 'Façade_en_dessous_des_attentes', 'Arrivee_tardive_compliquee_pendant_les_fêtes', 'ParkingCher', 'Magasins_fermés', 'Cher']
+                      }
+                  }
+                }
+              }
+        });
+        $("#textDisplay").text(review.text);
+        $("#pos").text(JSON.stringify(review.pos));
+        $("#neg").text(JSON.stringify(review.neg));
+        $("#rDisplay").text("Review "+current+" / "+totalReviews);
+
+      }
+
+      document.getElementById('submit').addEventListener('click',function() {
+        // Get the value from the editor
+        if(editor.getValue().pos.length > 0){
+          json['reviews'][current].pos = editor.getValue().pos;
+        }
+        if(editor.getValue().neg.length > 0){
+          json['reviews'][current].neg = editor.getValue().neg;
+        }
+        console.log(json['reviews'][current]);
+        current++;
+        $("#rDisplay").text("Review "+current+" / "+totalReviews);
+        percent = Math.floor((current / totalReviews) * 100);
+        $("#progress").css("width", percent+"%");
+        editor.destroy();
+        init_editor(json['reviews'][current]);
+        update_ddl();
+      });   
+
+      function update_ddl(){
+        var obj = JSON.stringify(json, null, 2);
+        var blob = new Blob([obj], {type: "application/json"});
+        var url  = URL.createObjectURL(blob);
+        // var a = document.createElement('a');
+        var ddl = document.getElementById('ddl');
+        ddl.download    = "tagged.json";
+        ddl.href        = url;
+        ddl.textContent = "Save As";
+        ddl.className = "btn btn-success";
+      }
+}
+</script>
+</body>
+
+</html>
