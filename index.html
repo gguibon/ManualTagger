@@ -73,6 +73,11 @@
           </div> 
       </div>
       <div class="row">
+        <div class="col-md-4"><label for="number">Review:</label></div>
+        <div class="col-md-4"><input type="number" class="form-control" id="number"></div>
+        <div class="col-md-4"><button id="goto" class="btn btn-default">Go to</button></div>  
+      </div>
+      <div class="row">
         <div class="col-sm-12 col-md-12">
           <div class="wow fadeInLeft" data-wow-delay="0.2s">
             <div class="service-box">
@@ -86,24 +91,46 @@
                 <!-- <pre id="fileDisplayArea"></pre> -->
               </div>
               <div class="panel panel-primary">
-              <div class="panel-heading"><h4 id="textDisplay"></h4></div>
+              <div class="panel-heading" style="height:200px;  overflow: scroll;"><h4 id="textDisplay"></h4></div>
               <div class="panel-body">              
                 <div class="row">
-                <div class="col-md-3"><strong>POS</strong></div>
-                <div class="col-md-3" id="pos"></div>
-                <div class="col-md-3"><strong>NEG</strong></div>
-                <div class="col-md-3" id="neg"></div>
+                <div class="col-md-1"><strong>POS</strong></div>
+                <div class="col-md-5" id="pos"></div>
+                <div class="col-md-1"><strong>NEG</strong></div>
+                <div class="col-md-5" id="neg"></div>
                 </div>
               </div>
               </div>
               <div class="panel panel-primary">
               <div class="panel-body"> 
+                  <div class="row">
+                        <div class="col-xs-6">
+                            <h3 class="text-center">Positive points</h3>
+                            <div id="positivediv" class="well" style="max-height: 300px;overflow: auto;">
+                              <ul id="check-list-pos" class="list-group checked-list-box">
+                              </ul>
+                            </div>
+                            <!-- <pre id="display-json"></pre> -->
+                        </div>
+                        <div class="col-xs-6">
+                            <h3 class="text-center">Negative points</h3>
+                            <div id="negativediv" class="well" style="max-height: 300px;overflow: auto;">
+                              <ul id="check-list-neg" class="list-group checked-list-box">
+                                </ul>
+                            </div>
+                            <!-- <pre id="display-json"></pre> -->
+                        </div>
+                  </div>
                 <div class="row">
-                  <div id="editor_holder"></div>
+                  <!-- <button class="btn btn-primary col-xs-12" id="get-checked-data">Get Checked Data</button> -->
+                  <button id='submit' class="btn btn-primary col-xs-12 btn-lg" data-toggle="popover" data-trigger="hover" data-content="Next review"><span class="glyphicon glyphicon-chevron-right"></span></button>
                 </div>
+                <!-- <div class="row">
+                  <div id="editor_holder"></div>
+                </div> -->
               </div>
               <div class="panel-footer">
-                <button id='submit' class="btn btn-primary" data-toggle="popover" data-trigger="hover" data-content="Next review"><span class="glyphicon glyphicon-chevron-right"></span></button>
+                
                 <a id="ddl" href="#" class="btn btn-success" data-toggle="popover" data-trigger="hover" data-content="Save as..."><span class="glyphicon glyphicon-save"></span></a>
               </div>
               </div>
@@ -160,8 +187,51 @@ $(document).ready(function() {
 
 
 </script>
+<div class="checkbox">
+  <label><input type="checkbox" value="">Option 1</label>
+</div>
 <script>
 window.onload = function() {
+
+  var options = [
+        set0 = ['Accueil', 'Beau', 'Bien situé', 'Calme', 'Equipement', 'Propre', 'Cosy', 'Modern', 'Vue', 'Recommandation', 'Au dessus des attentes', 'Confortable', 'Experience_immersive', 'Global', 'Cadeau_d_arrivee', 'Cuisine', 'Ascenceur', 'Au_dessus_des_attentes', 'Sureté', 'Romantique', 'AC', 'Douche', 'parking', 'lumineux', 'balcon', 'séchoir', 'grand', 'guides', 'wifi', 'machine_a_laver', 'cour_interieur', 'qualite-prix', 'literie'],
+        set1 = ['Bruit', 'SalleDeBainVieille', 'Façade_en_dessous_des_attentes', 'Arrivee_tardive_compliquee_pendant_les_fêtes', 'ParkingCher', 'Magasins_fermés', 'Cher', 'petit', 'cuisine petite', 'pas_séchoir_automatique', 'chauffage', 'malfamé', 'equipement', 'balcon', 'television_petite', 'vis-a-vis', 'sens_unique', 'ikea']
+      ];
+
+      function makeUL(array, targetid) {
+          // Create the list element:
+          // var list = document.createElement('ul');
+          // list.id = "check-list-pos";
+          // list.className = "list-group checked-list-box";
+          var target = document.getElementById(targetid);
+
+          for(var i = 0; i < array.length; i++) {
+              // Create the list item:
+              var item = document.createElement('li');
+
+              item.className = "list-group-item";
+
+              // Set its contents:
+              item.appendChild(document.createTextNode(array[i]));
+
+              // Add it to the list:
+              target.appendChild(item);
+
+              // $('<input />', { type: 'checkbox', id: 'pos'+i, value: name }).appendTo(target);
+              // $('<label />', { 'for': 'pos'+i, text: name }).appendTo(target);
+          }
+
+          listenCheckbox();
+
+          // Finally, return the constructed list:
+          // return list;
+      }
+
+
+      // Add the contents of options[0] to #foo:
+      // document.getElementById('positivediv').appendChild(makeUL(options[1]));
+      makeUL(options[0], "check-list-pos");
+      makeUL(options[1], "check-list-neg");
 
     var fileInput = document.getElementById('fileInput');
     var fileDisplayArea = document.getElementById('fileDisplayArea');
@@ -203,42 +273,42 @@ window.onload = function() {
 
     
     function init_editor(review){
-      editor = new JSONEditor(element, {
-          theme: 'bootstrap3',
-          iconlib: 'fontawesome4',
-          format: "grid",
-          disable_collapse : true,
-          disable_properties : true,
-          disable_array_reorder: true,
-          schema: {
-                type: "object",
-                title: "Review",
-                properties: {
-                  pos: {
-                    "type": "array",
-                    "format": "table",
-                    "title": "pos",
-                    "uniqueItems": false,
-                    "items": {
-                      "type": "string",
-                      "title": "Pos",
-                      enum: ['Equipement', 'Cosy', 'Modern', 'Vue', 'Clean', 'Recommandation', 'Au dessus des attentes', 'Confortable', 'Experience_immersive', 'Global', 'Cadeau_d_arrivé', 'Beau', 'Bien situé', 'Calme', 'View', 'Location', 'Cadeau_d_arrivee', 'Cuisine', 'Ascenceur', 'Au_dessus_des_attentes', 'Cosie', 'Ascenseur', 'Accueil', 'Sureté', 'Romantique', 'AC', 'Bien_situe', 'Douche', 'Propre', 'parking']
-                    }
-                  },
-                  neg: {
-                    "type": "array",
-                    "format": "table",
-                    "title": "neg",
-                    "uniqueItems": false,
-                    "items": {
-                      "type": "string",
-                      "title": "Neg",
-                      enum: ['Bruit', 'SalleDeBainVieille', 'Façade_en_dessous_des_attentes', 'Arrivee_tardive_compliquee_pendant_les_fêtes', 'ParkingCher', 'Magasins_fermés', 'Cher']
-                      }
-                  }
-                }
-              }
-        });
+      // editor = new JSONEditor(element, {
+      //     theme: 'bootstrap3',
+      //     iconlib: 'fontawesome4',
+      //     format: "grid",
+      //     disable_collapse : true,
+      //     disable_properties : true,
+      //     disable_array_reorder: true,
+      //     schema: {
+      //           type: "object",
+      //           title: "Review",
+      //           properties: {
+      //             pos: {
+      //               "type": "array",
+      //               "format": "table",
+      //               "title": "pos",
+      //               "uniqueItems": false,
+      //               "items": {
+      //                 "type": "string",
+      //                 "title": "Pos",
+      //                 enum: ['Equipement', 'Cosy', 'Modern', 'Vue', 'Clean', 'Recommandation', 'Au dessus des attentes', 'Confortable', 'Experience_immersive', 'Global', 'Cadeau_d_arrivé', 'Beau', 'Bien situé', 'Calme', 'View', 'Location', 'Cadeau_d_arrivee', 'Cuisine', 'Ascenceur', 'Au_dessus_des_attentes', 'Cosie', 'Ascenseur', 'Accueil', 'Sureté', 'Romantique', 'AC', 'Bien_situe', 'Douche', 'Propre', 'parking', 'safe', 'lumineux', 'balcon', 'séchoir', 'grand', 'guides', 'wifi', 'machine_a_laver', 'cour_interieur']
+      //               }
+      //             },
+      //             neg: {
+      //               "type": "array",
+      //               "format": "table",
+      //               "title": "neg",
+      //               "uniqueItems": false,
+      //               "items": {
+      //                 "type": "string",
+      //                 "title": "Neg",
+      //                 enum: ['Bruit', 'SalleDeBainVieille', 'Façade_en_dessous_des_attentes', 'Arrivee_tardive_compliquee_pendant_les_fêtes', 'ParkingCher', 'Magasins_fermés', 'Cher', 'petit', 'cuisine petite', 'pas_séchoir_automatique', 'chauffage', 'malfamé', 'equipement', 'balcon']
+      //                 }
+      //             }
+      //           }
+      //         }
+      //   });
         $("#textDisplay").text(review.text);
         $("#pos").text(JSON.stringify(review.pos));
         $("#neg").text(JSON.stringify(review.neg));
@@ -247,20 +317,46 @@ window.onload = function() {
       }
 
       document.getElementById('submit').addEventListener('click',function() {
+        // event.preventDefault(); 
+        var checkedItems = {}, posArray = [], negArray=[], counter = 0;
+        $("#check-list-neg li.active").each(function(idx, li) {
+            // checkedItems[counter] = $(li).text();
+            negArray.push( $(li).text() );
+            // counter++;
+        });
+        $("#check-list-pos li.active").each(function(idx, li) {
+            // checkedItems[counter] = $(li).text();
+            posArray.push( $(li).text() );
+            // counter++;
+        });
+        if(posArray.length > 0){
+          json['reviews'][current].pos = posArray;
+        }
+        if(negArray.length > 0){
+          json['reviews'][current].neg = negArray;
+        }
+
+
         // Get the value from the editor
-        if(editor.getValue().pos.length > 0){
-          json['reviews'][current].pos = editor.getValue().pos;
-        }
-        if(editor.getValue().neg.length > 0){
-          json['reviews'][current].neg = editor.getValue().neg;
-        }
+        // if(editor.getValue().pos.length > 0){
+        //   json['reviews'][current].pos = editor.getValue().pos;
+        // }
+        // if(editor.getValue().neg.length > 0){
+        //   json['reviews'][current].neg = editor.getValue().neg;
+        // }
         console.log(json['reviews'][current]);
         current++;
         $("#rDisplay").text("Review "+current+" / "+totalReviews);
         percent = Math.floor((current / totalReviews) * 100);
         $("#progress").css("width", percent+"%");
-        editor.destroy();
+        // editor.destroy();
         init_editor(json['reviews'][current]);
+        $('li').removeClass('active');
+        $("#check-list-pos").html("");
+        $("#check-list-neg").html("");
+        makeUL(options[0], "check-list-pos");
+      makeUL(options[1], "check-list-neg");
+
         update_ddl();
       });   
 
@@ -275,8 +371,131 @@ window.onload = function() {
         ddl.textContent = "Save As";
         ddl.className = "btn btn-success";
       }
+
+      document.getElementById('goto').addEventListener('click',function() {
+        current = $("#number").val();
+        $("#rDisplay").text("Review "+current+" / "+totalReviews);
+        percent = Math.floor((current / totalReviews) * 100);
+        $("#progress").css("width", percent+"%");
+        // editor.destroy();
+        init_editor(json['reviews'][current]);
+        $('li').removeClass('active');
+        makeUL(options[0], "check-list-pos");
+      makeUL(options[1], "check-list-neg");
+        update_ddl();
+      });
+
+    function listenCheckbox() {
+    $('.list-group.checked-list-box .list-group-item').each(function () {
+        
+        // Settings
+        var $widget = $(this),
+            $checkbox = $('<input type="checkbox" class="hidden" />'),
+            color = ($widget.data('color') ? $widget.data('color') : "primary"),
+            style = ($widget.data('style') == "button" ? "btn-" : "list-group-item-"),
+            settings = {
+                on: {
+                    icon: 'glyphicon glyphicon-check'
+                },
+                off: {
+                    icon: 'glyphicon glyphicon-unchecked'
+                }
+            };
+            
+        $widget.css('cursor', 'pointer')
+        $widget.append($checkbox);
+
+        // Event Handlers
+        $widget.on('click', function () {
+            $checkbox.prop('checked', !$checkbox.is(':checked'));
+            $checkbox.triggerHandler('change');
+            updateDisplay();
+        });
+        $checkbox.on('change', function () {
+            updateDisplay();
+        });
+          
+
+        // Actions
+        function updateDisplay() {
+            var isChecked = $checkbox.is(':checked');
+
+            // Set the button's state
+            $widget.data('state', (isChecked) ? "on" : "off");
+
+            // Set the button's icon
+            $widget.find('.state-icon')
+                .removeClass()
+                .addClass('state-icon ' + settings[$widget.data('state')].icon);
+
+            // Update the button's color
+            if (isChecked) {
+                $widget.addClass(style + color + ' active');
+            } else {
+                $widget.removeClass(style + color + ' active');
+            }
+        }
+
+        // Initialization
+        function init() {
+            
+            if ($widget.data('checked') == true) {
+                $checkbox.prop('checked', !$checkbox.is(':checked'));
+            }
+            
+            updateDisplay();
+
+            // Inject the icon if applicable
+            if ($widget.find('.state-icon').length == 0) {
+                $widget.prepend('<span class="state-icon ' + settings[$widget.data('state')].icon + '"></span>');
+            }
+        }
+        init();
+    });
+    
+    $('#get-checked-data').on('click', function(event) {
+        event.preventDefault(); 
+        var checkedItems = {}, posArray = [], negArray=[], counter = 0;
+        $("#check-list-neg li.active").each(function(idx, li) {
+            // checkedItems[counter] = $(li).text();
+            negArray.push( $(li).text() );
+            // counter++;
+        });
+        $("#check-list-pos li.active").each(function(idx, li) {
+            // checkedItems[counter] = $(li).text();
+            posArray.push( $(li).text() );
+            // counter++;
+        });
+        json['reviews'][current].pos = posArray;
+        json['reviews'][current].neg = negArray;
+        $('#display-json').html(JSON.stringify(json['reviews'][current], null, '\t'));
+    });
+  }
+      
 }
+
+
+
 </script>
+<link href="css/style.css" rel="stylesheet" type="text/css"/>
+<style>
+  /* list check box */
+/* CSS REQUIRED */
+.state-icon {
+    left: -5px;
+}
+.list-group-item-primary {
+    color: rgb(255, 255, 255);
+    background-color: rgb(66, 139, 202);
+}
+
+/* DEMO ONLY - REMOVES UNWANTED MARGIN */
+.well .list-group {
+    margin-bottom: 0px;
+}
+/* ./ list check box */
+</style>
+
 </body>
 
 </html>
